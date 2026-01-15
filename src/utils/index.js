@@ -109,7 +109,10 @@ export const fetchSearchResults = async () => {
     response = await cioClient.search.getSearchResults(query, parameters);
   }
 
-  return response.response;
+  return {
+    ...response.response,
+    result_id: response.result_id,
+  };
 };
 
 export const fetchAutoCompleteResults = (query) => (

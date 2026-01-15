@@ -80,7 +80,11 @@ function Search() {
             page={ page }
             loadMoreStatus={ loadMoreStatus }
             loadMoreSearchResults={ loadMoreSearchResultsAndSetState }
-            dataAttributes={ { 'data-cnstrc-search': '' } }
+            dataAttributes={ {
+              'data-cnstrc-search': '',
+              'data-cnstrc-result-id': resultId,
+              'data-cnstrc-result-page': page,
+            } }
             error={ error }
           />
           )
@@ -90,7 +94,6 @@ function Search() {
           className="bg-blue-100 border-t border-b border-blue-500 text-blue-700 px-4 py-3 w-full"
           role="alert"
           data-cnstrc-search
-          data-aaaa
           data-cnstrc-zero-result
           data-cnstrc-result-id={ resultId }
           data-cnstrc-num-results="0"
