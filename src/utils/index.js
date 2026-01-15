@@ -145,7 +145,10 @@ export const fetchBrowseReults = async (filterName, filterValue) => {
     parameters
   );
 
-  return response.response;
+  return {
+    ...response.response,
+    result_id: response.result_id,
+  };
 };
 
 export const fetchRecommendations = async (podId) => {

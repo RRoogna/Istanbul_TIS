@@ -16,6 +16,7 @@ function Browse() {
   const [loadStatus, setLoadStatus] = useState(loadStatuses.STALE);
   const [items, setItems] = useState([]);
   const [totalResults, setTotalResults] = useState(0);
+  const [resultId, setResultId] = useState('');
   const [error, setError] = useState();
 
   useEffect(() => {
@@ -25,7 +26,8 @@ function Browse() {
       try {
         // If browseGroup?.group_id undefined then filter value is root group
         const filterValue = browseGroup?.group_id || rootBrowseGroupId;
-        const response = await fetchBrowseReults('group_id', filterValue);
+        const filterName = 'group_id';
+        const response = await fetchBrowseReults(filterName, filterValue);
 
         setLoadStatus(loadStatuses.LOADING);
         setItems(response?.results);
@@ -38,6 +40,7 @@ function Browse() {
         setFacets(response.facets);
         setGroups(response.groups);
         setTotalResults(response.total_num_results);
+        setResultId(response.result_id || '');
         setLoadStatus(loadStatuses.SUCCESS);
       } catch (e) {
         setLoadStatus(loadStatuses.FAILED);
@@ -49,13 +52,22 @@ function Browse() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location, rootBrowseGroupId]);
 
+  const filterName = 'group_id';
+  const filterValue = browseGroup?.group_id || rootBrowseGroupId;
+
   return (
     <Results
       items={items}
       loadStatus={loadStatus}
       totalResults={totalResults}
       error={error}
-      dataAttributes={{ 'data-cnstrc-browse': true }}
+      dataAttributes={{
+        'data-cnstrc-browse': '',
+        'data-cnstrc-result-id': resultId,
+        'data-cnstrc-result-page': 1,
+        'data-cnstrc-filter-name': filterName,
+        'data-cnstrc-filter-value': filterValue,
+      }}
     />
   );
 }
