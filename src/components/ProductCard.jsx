@@ -2,10 +2,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
+import { useWishlist } from "../context/WishlistContext";
 
 function ProductCard({ product }) {
   const navigate = useNavigate();
   const { addToCart } = useCart();
+  const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
   const [addedToCart, setAddedToCart] = useState(false);
   const imageTagClassesLoading =
     "w-[225px] md:w-[300px] h-[225px] t-cover transition-opacity opacity-0 ml-auto mr-auto";
@@ -23,11 +25,15 @@ function ProductCard({ product }) {
     setTimeout(() => setAddedToCart(false), 2000);
   };
 
-  const [isWishlisted, setIsWishlisted] = useState(false);
+  const isWishlisted = isInWishlist(product.data.id);
 
   const handleWishlistToggle = (e) => {
     e.stopPropagation();
-    setIsWishlisted(!isWishlisted);
+    if (isWishlisted) {
+      removeFromWishlist(product.data.id);
+    } else {
+      addToWishlist(product);
+    }
   };
 
   const price = product.data?.sale_price || product.data?.price;
@@ -38,6 +44,7 @@ function ProductCard({ product }) {
       data-cnstrc-item-id={product.data.id}
       data-cnstrc-item-name={product.value}
       data-cnstrc-item-variation-id={product.data?.variation_id}
+      data-cnstrc-item-price={price}
     >
       <div
         className="cursor-pointer flex-grow flex flex-col"
