@@ -1,10 +1,10 @@
 /* eslint-disable react/react-in-jsx-scope */
-import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import Browse from './components/Browse';
 import CartPage from './components/CartPage';
 import CheckoutPage from './components/CheckoutPage';
 import CnstrcHighlighter from './components/CnstrcHighlighter';
+import Home from './components/Home';
 import OrderConfirmationPage from './components/OrderConfirmationPage';
 import ProductPage from './components/ProductPage';
 import Search from './components/Search/Search';
