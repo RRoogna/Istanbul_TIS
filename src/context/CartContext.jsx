@@ -1,38 +1,68 @@
 /* eslint-disable react/react-in-jsx-scope */
-import { createContext, useContext, useMemo, useState } from 'react';
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
+
+const CART_STORAGE_KEY = 'tis_cart';
 
 const CartContext = createContext();
 
-export function CartProvider({ children }) {
-  const [cartItems, setCartItems] = useState([]);
+const getInitialCart = () => {
+  try {
+    const stored = localStorage.getItem(CART_STORAGE_KEY);
+    return stored ? JSON.parse(stored) : [];
+  } catch {
+    return [];
+  }
+};
 
-  const addToCart = (product, quantity = 1) => {
+export function CartProvider({ children }) {
+  const [cartItems, setCartItems] = useState(getInitialCart);
+
+  useEffect(() => {
+    localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cartItems));
+  }, [cartItems]);
+
+  const addToCart = useCallback((product, quantity = 1) => {
     setCartItems((prev) => {
-      const existingItem = prev.find((item) => item.data.id === product.data.id);
+      const existingItem = prev.find(
+        (item) => item.data.id === product.data.id
+      );
       if (existingItem) {
         return prev.map((item) =>
-          item.data.id === product.data.id ? { ...item, quantity: item.quantity + quantity } : item
+          item.data.id === product.data.id
+            ? { ...item, quantity: item.quantity + quantity }
+            : item
         );
       }
       return [...prev, { ...product, quantity }];
     });
-  };
+  }, []);
 
-  const removeFromCart = (productId) => {
+  const removeFromCart = useCallback((productId) => {
     setCartItems((prev) => prev.filter((item) => item.data.id !== productId));
-  };
+  }, []);
 
-  const updateQuantity = (productId, quantity) => {
+  const updateQuantity = useCallback((productId, quantity) => {
     if (quantity <= 0) {
-      removeFromCart(productId);
+      setCartItems((prev) => prev.filter((item) => item.data.id !== productId));
       return;
     }
-    setCartItems((prev) => prev.map((item) => (item.data.id === productId ? { ...item, quantity } : item)));
-  };
+    setCartItems((prev) =>
+      prev.map((item) =>
+        item.data.id === productId ? { ...item, quantity } : item
+      )
+    );
+  }, []);
 
-  const clearCart = () => {
+  const clearCart = useCallback(() => {
     setCartItems([]);
-  };
+  }, []);
 
   const cartTotal = cartItems.reduce((total, item) => {
     const price = item.data?.sale_price || item.data?.price || 0;
@@ -51,7 +81,15 @@ export function CartProvider({ children }) {
       cartTotal,
       cartCount,
     }),
-    [cartItems, cartTotal, cartCount]
+    [
+      cartItems,
+      cartTotal,
+      cartCount,
+      addToCart,
+      removeFromCart,
+      updateQuantity,
+      clearCart,
+    ]
   );
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
