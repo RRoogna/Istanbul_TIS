@@ -68,7 +68,7 @@ function Layout() {
 
   return (
     <div className="min-h-screen flex flex-col text-lg sm:text-base">
-      <div className="flex flex-col sm:flex-row justify-between sm:ml-auto sm:mr-auto mb-2 md:mb-5 relative">
+      <div className="flex flex-row items-center justify-between w-full mb-2 md:mb-5 relative">
         <ConstructorLogo />
         <div className="flex items-center gap-4">
           <AutocompleteSearch />
