@@ -15,7 +15,7 @@ function Recommendations() {
     const fetchRecommendationsFromAPI = async () => {
       setLoaded(loadStatuses.LOADING);
       try {
-        const response = await fetchRecommendations('item_detail');
+        const response = await fetchRecommendations('hp-bestsellers');
 
         setRecommendations(response?.response?.results);
         setNumResults(response?.response?.total_num_results);
