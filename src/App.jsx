@@ -9,6 +9,7 @@ import ProductPage from './components/ProductPage';
 import Search from './components/Search/Search';
 import { CartProvider } from './context/CartContext';
 import Layout from './Layout';
+import Home from './components/Home';
 
 function App() {
   return (
@@ -16,6 +17,10 @@ function App() {
       <div className="App p-5 max-w-lg sm:max-w-7xl mx-auto">
         <Routes>
           <Route path="*" element={<Layout />}>
+            <Route
+              index
+              element={ <Home /> }
+            />
             <Route path="search" element={<Search />} />
             <Route path="browse" element={<Browse />}>
               <Route path=":groupId" element={<Browse />} />
