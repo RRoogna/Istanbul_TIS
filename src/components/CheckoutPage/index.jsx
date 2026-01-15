@@ -26,12 +26,29 @@ function CheckoutPage() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const fillDummyData = () => {
+    setFormData({
+      email: 'john.doe@example.com',
+      firstName: 'John',
+      lastName: 'Doe',
+      address: '123 Main Street',
+      city: 'New York',
+      zipCode: '10001',
+      cardNumber: '4242 4242 4242 4242',
+      cardExpiry: '12/28',
+      cardCvc: '123',
+    });
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     setIsProcessing(true);
 
     // Generate order ID
-    const orderId = `ORD-${Date.now()}-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
+    const orderId = `ORD-${Date.now()}-${Math.random()
+      .toString(36)
+      .substr(2, 9)
+      .toUpperCase()}`;
 
     // Calculate totals
     const subtotal = cartTotal;
@@ -73,8 +90,12 @@ function CheckoutPage() {
   if (cartItems.length === 0) {
     return (
       <div className="text-center py-20">
-        <h1 className="text-3xl font-bold text-gray-900 mb-4">Your Cart is Empty</h1>
-        <p className="text-gray-600 mb-8">Add some products before checking out.</p>
+        <h1 className="text-3xl font-bold text-gray-900 mb-4">
+          Your Cart is Empty
+        </h1>
+        <p className="text-gray-600 mb-8">
+          Add some products before checking out.
+        </p>
         <button
           type="button"
           onClick={() => navigate('/browse')}
@@ -88,16 +109,30 @@ function CheckoutPage() {
 
   return (
     <div className="checkout-page">
-      <h1 className="text-3xl font-bold text-gray-900 mb-8">Checkout</h1>
+      <div className="flex items-center justify-between mb-8">
+        <h1 className="text-3xl font-bold text-gray-900">Checkout</h1>
+        <button
+          type="button"
+          onClick={fillDummyData}
+          className="px-4 py-2 text-sm bg-stone-100 hover:bg-stone-200 text-stone-700 rounded-lg border border-stone-300 transition-colors"
+        >
+          Fill Demo Data
+        </button>
+      </div>
 
       <form onSubmit={handleSubmit} className="flex flex-col lg:flex-row gap-8">
         <div className="lg:w-2/3 space-y-8">
           {/* Contact Information */}
           <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <h2 className="text-xl font-bold text-gray-900 mb-4">Contact Information</h2>
+            <h2 className="text-xl font-bold text-gray-900 mb-4">
+              Contact Information
+            </h2>
             <div className="space-y-4">
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
                   Email
                 </label>
                 <input
@@ -116,10 +151,15 @@ function CheckoutPage() {
 
           {/* Shipping Address */}
           <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <h2 className="text-xl font-bold text-gray-900 mb-4">Shipping Address</h2>
+            <h2 className="text-xl font-bold text-gray-900 mb-4">
+              Shipping Address
+            </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  htmlFor="firstName"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
                   First Name
                 </label>
                 <input
@@ -133,7 +173,10 @@ function CheckoutPage() {
                 />
               </div>
               <div>
-                <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  htmlFor="lastName"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
                   Last Name
                 </label>
                 <input
@@ -147,7 +190,10 @@ function CheckoutPage() {
                 />
               </div>
               <div className="md:col-span-2">
-                <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  htmlFor="address"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
                   Address
                 </label>
                 <input
@@ -162,7 +208,10 @@ function CheckoutPage() {
                 />
               </div>
               <div>
-                <label htmlFor="city" className="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  htmlFor="city"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
                   City
                 </label>
                 <input
@@ -176,7 +225,10 @@ function CheckoutPage() {
                 />
               </div>
               <div>
-                <label htmlFor="zipCode" className="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  htmlFor="zipCode"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
                   ZIP Code
                 </label>
                 <input
@@ -194,10 +246,15 @@ function CheckoutPage() {
 
           {/* Payment Information */}
           <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <h2 className="text-xl font-bold text-gray-900 mb-4">Payment Information</h2>
+            <h2 className="text-xl font-bold text-gray-900 mb-4">
+              Payment Information
+            </h2>
             <div className="space-y-4">
               <div>
-                <label htmlFor="cardNumber" className="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  htmlFor="cardNumber"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
                   Card Number
                 </label>
                 <input
@@ -213,7 +270,10 @@ function CheckoutPage() {
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label htmlFor="cardExpiry" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label
+                    htmlFor="cardExpiry"
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
                     Expiry Date
                   </label>
                   <input
@@ -228,7 +288,10 @@ function CheckoutPage() {
                   />
                 </div>
                 <div>
-                  <label htmlFor="cardCvc" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label
+                    htmlFor="cardCvc"
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
                     CVC
                   </label>
                   <input
@@ -250,17 +313,24 @@ function CheckoutPage() {
         {/* Order Summary */}
         <div className="lg:w-1/3">
           <div className="bg-gray-50 rounded-lg p-6 sticky top-4">
-            <h2 className="text-xl font-bold text-gray-900 mb-4">Order Summary</h2>
+            <h2 className="text-xl font-bold text-gray-900 mb-4">
+              Order Summary
+            </h2>
 
             <div className="space-y-3 mb-6">
               {cartItems.map((item) => {
                 const price = item.data?.sale_price || item.data?.price || 0;
                 return (
-                  <div key={item.data.id} className="flex justify-between text-sm">
+                  <div
+                    key={item.data.id}
+                    className="flex justify-between text-sm"
+                  >
                     <span className="text-gray-600">
                       {item.value} x {item.quantity}
                     </span>
-                    <span className="font-medium">${(price * item.quantity).toFixed(2)}</span>
+                    <span className="font-medium">
+                      ${(price * item.quantity).toFixed(2)}
+                    </span>
                   </div>
                 );
               })}
@@ -293,7 +363,9 @@ function CheckoutPage() {
               disabled={isProcessing}
               className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-semibold py-4 px-6 rounded-lg"
             >
-              {isProcessing ? 'Processing...' : `Pay $${(cartTotal * 1.1).toFixed(2)}`}
+              {isProcessing
+                ? 'Processing...'
+                : `Pay $${(cartTotal * 1.1).toFixed(2)}`}
             </button>
           </div>
         </div>

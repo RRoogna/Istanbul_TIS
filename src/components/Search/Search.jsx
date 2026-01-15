@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { FiltersContext } from '../../Layout';
 import { fetchSearchResults, loadMoreSearchResults } from '../../utils';
@@ -26,7 +26,12 @@ function Search() {
 
         setLoadStatus(loadStatuses.LOADING);
         setItems(response.results);
-        setSortOptions(response.sort_options.map((item) => ({ ...item, id: `${item.sort_by}_${item.sort_order}` })));
+        setSortOptions(
+          response.sort_options.map((item) => ({
+            ...item,
+            id: `${item.sort_by}_${item.sort_order}`,
+          }))
+        );
         setFacets(response.facets);
         setGroups(response.groups);
         setTotalResults(response.total_num_results);
@@ -40,6 +45,7 @@ function Search() {
 
     setPage(1);
     fetchSearchResultsFromAPI();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location]);
 
   const loadMoreSearchResultsAndSetState = async () => {
@@ -50,7 +56,12 @@ function Search() {
 
       if (response) {
         setItems([...items, ...response.results]);
-        setSortOptions(response.sort_options.map((item) => ({ ...item, id: `${item.sort_by}_${item.sort_order}` })));
+        setSortOptions(
+          response.sort_options.map((item) => ({
+            ...item,
+            id: `${item.sort_by}_${item.sort_order}`,
+          }))
+        );
         setFacets(response.facets);
         setGroups(response.groups);
         setTotalResults(response.total_num_results);
@@ -68,8 +79,17 @@ function Search() {
 
   return (
     <>
-      {isLoading && (
-        <Loader />
+      {isLoading && <Loader />}
+      {!isLoading && loadStatus === loadStatuses.SUCCESS && numItems >= 1 && (
+        <Results
+          items={items}
+          totalResults={totalResults}
+          page={page}
+          loadMoreStatus={loadMoreStatus}
+          loadMoreSearchResults={loadMoreSearchResultsAndSetState}
+          dataAttributes={{ 'data-cnstrc-search': '' }}
+          error={error}
+        />
       )}
       {
         !isLoading && (loadStatus === loadStatuses.SUCCESS && numItems >= 1)
@@ -95,12 +115,14 @@ function Search() {
           role="alert"
           data-cnstrc-search
           data-cnstrc-zero-result
-          data-cnstrc-result-id={ resultId }
+          data-cnstrc-result-id={resultId}
           data-cnstrc-num-results="0"
           data-cnstrc-result-page="1"
         >
           <p className="font-bold">No results found</p>
-          <p className="text-sm">Try entering a query in the search box above</p>
+          <p className="text-sm">
+            Try entering a query in the search box above
+          </p>
         </div>
       )}
     </>
