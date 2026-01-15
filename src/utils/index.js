@@ -13,7 +13,10 @@ export function parseUrlParameters() {
 
     urlSearchParams = new URLSearchParams(reformattedUrl);
   } else if (decodedURI.match(/cnstrc.com\/browse\//)) {
-    const reformattedUrl = decodedURI.replace(/\?q=.+browse\/([^/]+)\/([^/]+)\?/, '?filterName=$1&filterValue=$2&');
+    const reformattedUrl = decodedURI.replace(
+      /\?q=.+browse\/([^/]+)\/([^/]+)\?/,
+      '?filterName=$1&filterValue=$2&'
+    );
 
     urlSearchParams = new URLSearchParams(reformattedUrl);
   } else {
@@ -66,7 +69,8 @@ export function parseUrlParameters() {
     const filterMatch = key.match(/filters\[(.*?)\]/);
 
     if (filterMatch?.length) {
-      searchResultsParameters.parameters.filters[filterMatch?.[1]] = value.split(',');
+      searchResultsParameters.parameters.filters[filterMatch?.[1]] =
+        value.split(',');
     }
     // key is category
     if (key === 'group_id') {
@@ -78,16 +82,8 @@ export function parseUrlParameters() {
 }
 
 export const fetchSearchResults = async () => {
-  const {
-    query,
-    parameters,
-    key,
-    filterName,
-    filterValue,
-    i,
-    s,
-    ui,
-  } = parseUrlParameters();
+  const { query, parameters, key, filterName, filterValue, i, s, ui } =
+    parseUrlParameters();
   let response;
 
   // Custom functionality - allows usage of cnstrc request urls in the search bar
@@ -100,7 +96,11 @@ export const fetchSearchResults = async () => {
     });
 
     if (filterName && filterValue) {
-      response = await newCioClient.browse.getBrowseResults(filterName, filterValue, parameters);
+      response = await newCioClient.browse.getBrowseResults(
+        filterName,
+        filterValue,
+        parameters
+      );
     } else {
       response = await newCioClient.search.getSearchResults(query, parameters);
     }
@@ -112,14 +112,13 @@ export const fetchSearchResults = async () => {
   return response.response;
 };
 
-export const fetchAutoCompleteResults = (query) => (
+export const fetchAutoCompleteResults = (query) =>
   cioClient.autocomplete.getAutocompleteResults(query, {
     resultsPerSection: {
       Products: 6,
       'Search Suggestions': 10,
     },
-  })
-);
+  });
 
 export const loadMoreSearchResults = async (currentPage, totalResults) => {
   if (20 * currentPage >= totalResults) {
@@ -127,24 +126,30 @@ export const loadMoreSearchResults = async (currentPage, totalResults) => {
   }
 
   const { query, parameters } = parseUrlParameters();
-  const response = await cioClient.search.getSearchResults(
-    query,
-    { ...parameters, page: currentPage + 1 },
-  );
+  const response = await cioClient.search.getSearchResults(query, {
+    ...parameters,
+    page: currentPage + 1,
+  });
 
   return response.response;
 };
 
 export const fetchBrowseReults = async (filterName, filterValue) => {
   const { parameters } = parseUrlParameters();
-  const response = await cioClient.browse.getBrowseResults(filterName, filterValue, parameters);
+  const response = await cioClient.browse.getBrowseResults(
+    filterName,
+    filterValue,
+    parameters
+  );
 
   return response.response;
 };
 
 export const fetchRecommendations = async (podId) => {
   // To avoid zero results, we apply a filter to enable backfilling via "filtered_items" strategy
-  const response = await cioClient.recommendations.getRecommendations(podId, { numResults: 6 });
+  const response = await cioClient.recommendations.getRecommendations(podId, {
+    numResults: 10,
+  });
 
   return response;
 };
