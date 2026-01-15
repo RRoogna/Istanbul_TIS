@@ -13,6 +13,7 @@ import FacetFilters from './components/Filters/FacetFilters';
 import FiltersMobile from './components/Filters/FiltersMobile';
 import GroupFilters from './components/Filters/GroupFilters';
 import SortOptions from './components/Filters/SortOptions';
+import Footer from './components/Footer';
 import MainNavbar from './components/MainNavbar';
 import { useCart } from './context/CartContext';
 
@@ -66,7 +67,7 @@ function Layout() {
   }, []);
 
   return (
-    <div className="text-lg sm:text-base">
+    <div className="min-h-screen flex flex-col text-lg sm:text-base">
       <div className="flex flex-col sm:flex-row justify-between sm:ml-auto sm:mr-auto mb-2 md:mb-5 relative">
         <ConstructorLogo />
         <div className="flex items-center gap-4">
@@ -99,17 +100,23 @@ function Layout() {
           </button>
         </div>
       </div>
-      <MainNavbar browseGroups={browseGroups} />
-      <div className="flex pb-10">
-        {location.pathname !== '/' && (
-          <div
-            id="search-filters"
-            className="w-[200px] hidden sm:block mr-5 p-2"
-          >
-            {!!groups.length && <GroupFilters groups={groups} />}
-            {!!facets.length && <FacetFilters facets={facets} />}
-          </div>
+      {!location.pathname.startsWith('/checkout') &&
+        !location.pathname.startsWith('/order-confirmation') && (
+          <MainNavbar browseGroups={browseGroups} />
         )}
+      <div className="flex pb-10">
+        {location.pathname !== '/' &&
+          !location.pathname.startsWith('/cart') &&
+          !location.pathname.startsWith('/checkout') &&
+          !location.pathname.startsWith('/order-confirmation') && (
+            <div
+              id="search-filters"
+              className="w-[200px] hidden sm:block mr-5 p-2"
+            >
+              {!!groups.length && <GroupFilters groups={groups} />}
+              {!!facets.length && <FacetFilters facets={facets} />}
+            </div>
+          )}
         <div className="items-center w-full">
           {location.pathname !== '/' &&
             !location.pathname.startsWith('/product/') &&
@@ -142,6 +149,7 @@ function Layout() {
           </FiltersContext.Provider>
         </div>
       </div>
+      <Footer />
     </div>
   );
 }
